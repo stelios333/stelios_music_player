@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Stelios music player</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="toastify.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon"
+        href="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ3Ny44NjcgNDc3Ljg2NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDc3Ljg2NyA0NzcuODY3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiBjbGFzcz0iIj48Zz48Zz4KCTxnPgoJCTxwYXRoIGQ9Ik00NzIuMTg0LDQuMzQ3Yy0zLjYzMS0zLjIwOS04LjQ0MS00Ljc1LTEzLjI2MS00LjI1bC0zMDcuMiwzNC4xMzNjLTguNjQ3LDAuOTU3LTE1LjE5LDguMjY1LTE1LjE4OSwxNi45NjRWMzU1LjM0ICAgIGMtMTUuNDY4LTkuMjU2LTMzLjE3NC0xNC4xMDItNTEuMi0xNC4wMTJDMzguMjgxLDM0MS4zMjksMCwzNzEuOTQ2LDAsNDA5LjU5NXMzOC4yODEsNjguMjY3LDg1LjMzMyw2OC4yNjcgICAgczg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N1YxNTEuODg5bDI3My4wNjctMzAuNDEzdjE5OS42OGMtMTUuNDczLTkuMjM4LTMzLjE3OS0xNC4wNjYtNTEuMi0xMy45NjEgICAgYy00Ny4wNTMsMC04NS4zMzMsMzAuNjE4LTg1LjMzMyw2OC4yNjdjMCwzNy42NDksMzguMjgxLDY4LjI2Nyw4NS4zMzMsNjguMjY3czg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N3YtMzU4LjQgICAgQzQ3Ny44NjYsMTIuMjA4LDQ3NS44LDcuNTg0LDQ3Mi4xODQsNC4zNDd6IiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBjbGFzcz0iYWN0aXZlLXBhdGgiIGRhdGEtb2xkX2NvbG9yPSIjMDAwMDAwIiBmaWxsPSIjRkY3QjAwIi8+Cgk8L2c+CjwvZz48L2c+IDwvc3ZnPgo=">
+</head>
+
+<body>
+    <div id="loading">
+        <!-- Stolen from google -->
+        <svg class="loader" version="1.0" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+            <style>
+                @keyframes rotate {
+                    0% {
+                        transform: rotate(0deg)
+                    }
+
+                    to {
+                        transform: rotate(360deg)
+                    }
+                }
+
+                @keyframes fillunfill {
+                    0% {
+                        stroke-dashoffset: 32.3
+                    }
+
+                    50% {
+                        stroke-dashoffset: 0
+                    }
+
+                    to {
+                        stroke-dashoffset: -31.9
+                    }
+                }
+
+                @keyframes rot {
+                    0% {
+                        transform: rotate(0deg)
+                    }
+
+                    to {
+                        transform: rotate(-360deg)
+                    }
+                }
+
+                @keyframes colors {
+
+                    0%,
+                    to {
+                        stroke: blue
+                    }
+                }
+            </style>
+            <g
+                style="animation-duration:1568.63ms;animation-iteration-count:infinite;animation-name:rotate;animation-timing-function:linear;transform-origin:50% 50%;width:16px;height:16px">
+                <path fill="none" d="M8 1.125A6.875 6.875 0 1 1 1.125 8" stroke-width="2.25" stroke-linecap="round"
+                    style="animation-duration:1333ms,5332ms,5332ms;animation-fill-mode:forwards;animation-iteration-count:infinite,infinite,infinite;animation-name:fillunfill,rot,colors;animation-play-state:running,running,running;animation-timing-function:cubic-bezier(.4,0,.2,1),steps(4),linear;transform-origin:50% 50%"
+                    stroke-dasharray="32.4" stroke-dashoffset="32.4" />
+            </g>
+        </svg>
+    </div>
+    <div class="wrapper">
+        <div class="title-wrapper">
+            <div class="title-text">
+                <h1 class="header" id="header">
+                    Stelios music player
+                </h1>
+            </div>
+            <div class="pbwrapper">
+                <div class="progress-bar">
+
+                    <span class="progress-bar-fill" id="pbar" style="width: 100%;"></span>
+                </div>
+            </div>
+        </div>
+
+        <p>
+            <button id="addbtn" class="large-btn ctrlbtn" disabled onclick="addSongs()">
+                <span class="text-with-icon">Add <span class="circular-icon plus-icon"><img src="plus-solid.svg"
+                            width="20" height="20"></span></span>
+            </button>
+            <button id="removeallbtn" class="large-btn ctrlbtn" disabled onclick="removeAllSongsAfterConfirm()">
+                <span class="text-with-icon">Remove all <span class="circular-icon x-icon"><img src="x-solid.svg"
+                            width="20" height="20"></span></span>
+            </button>
+        </p>
+        <div class="flexi-content-wrapper">
+            <div id="playerContainer">
+
+            </div>
+        </div>
+        <div id="player-template">
+            <div class="playerWrapper">
+                <div class="player">
+                    <div class="player-box">
+                        <p style="text-align: left;" class="song-title">No name</p>
+                        <audio class="audioPlayer" controls onplay="stopAllExcept(this.getAttribute('name'))"
+                            onended="nextSong(this.getAttribute('name'))"></audio>
+                    </div>
+                    <div class="btn-box">
+                        <div class="x-btn-box">
+                            <button class="commands x-btn">x</button>
+                        </div>
+                        <div class="arrow-btn-box">
+                            <button class="commands up-btn">↑</button>
+                            <button class="commands down-btn">↓</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="playerPlaceholderTemplate">
+            <div id="playerPlaceholder">
+                <p>
+                    <img alt=""
+                        src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ3Ny44NjcgNDc3Ljg2NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDc3Ljg2NyA0NzcuODY3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiBjbGFzcz0iIj48Zz48Zz4KCTxnPgoJCTxwYXRoIGQ9Ik00NzIuMTg0LDQuMzQ3Yy0zLjYzMS0zLjIwOS04LjQ0MS00Ljc1LTEzLjI2MS00LjI1bC0zMDcuMiwzNC4xMzNjLTguNjQ3LDAuOTU3LTE1LjE5LDguMjY1LTE1LjE4OSwxNi45NjRWMzU1LjM0ICAgIGMtMTUuNDY4LTkuMjU2LTMzLjE3NC0xNC4xMDItNTEuMi0xNC4wMTJDMzguMjgxLDM0MS4zMjksMCwzNzEuOTQ2LDAsNDA5LjU5NXMzOC4yODEsNjguMjY3LDg1LjMzMyw2OC4yNjcgICAgczg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N1YxNTEuODg5bDI3My4wNjctMzAuNDEzdjE5OS42OGMtMTUuNDczLTkuMjM4LTMzLjE3OS0xNC4wNjYtNTEuMi0xMy45NjEgICAgYy00Ny4wNTMsMC04NS4zMzMsMzAuNjE4LTg1LjMzMyw2OC4yNjdjMCwzNy42NDksMzguMjgxLDY4LjI2Nyw4NS4zMzMsNjguMjY3czg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N3YtMzU4LjQgICAgQzQ3Ny44NjYsMTIuMjA4LDQ3NS44LDcuNTg0LDQ3Mi4xODQsNC4zNDd6IiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBjbGFzcz0iYWN0aXZlLXBhdGgiIGRhdGEtb2xkX2NvbG9yPSIjMDAwMDAwIiBmaWxsPSIjRkY3QjAwIi8+Cgk8L2c+CjwvZz48L2c+IDwvc3ZnPgo="
+                        style="height:256px; width:256px" />
+
+                </p>
+                <h2 class="white-text align-center">
+                    <span class="text-with-icon">Click
+                        <span class="circular-icon plus-icon" style="margin-right: 5px;">
+                            <img src="plus-solid.svg" width="20" height="20">
+                        </span>
+                        to add a song
+                    </span>
+                </h2>
+            </div>
+
+        </div>
+    </div>
+    <script src="database_mgr.js"></script>
+    <script>
+
+        const playerContainer = document.getElementById("playerContainer");
+        const playerTemplate = document.getElementById("player-template")
+        const RemoveAllBtn = document.getElementById("removeallbtn")
+        const addBtn = document.getElementById("addbtn")
+        const playerPlaceholderTemplate = document.getElementById("playerPlaceholderTemplate")
+        const loader = document.getElementById("loading")
+        const header = document.getElementById("header")
+        const progressbar = document.getElementById("pbar")
+        progressbar.style.height = getAbsoluteHeight(header) + "px"
+
+        if (!localStorage.getItem("song_order")) {
+            localStorage.setItem("song_order", "[]")
+        }
+
+        function getAbsoluteHeight(el) {
+            // https://stackoverflow.com/a/23749355
+            el = (typeof el === 'string') ? document.querySelector(el) : el;
+
+            var styles = window.getComputedStyle(el);
+            var margin = parseFloat(styles['marginTop']) +
+                parseFloat(styles['marginBottom']);
+
+            return Math.ceil(el.offsetHeight + margin);
+        }
+
+        function arraymove(arr, fromIndex, toIndex) {
+            var element = arr[fromIndex];
+            arr.splice(fromIndex, 1);
+            arr.splice(toIndex, 0, element);
+        }
+
+        function disableButtons() {
+            [...document.querySelectorAll(".ctrlbtn")].forEach(btn => { btn.disabled = true })
+        }
+
+        function enableButtons() {
+            [...document.querySelectorAll(".ctrlbtn")].forEach(btn => { btn.disabled = false })
+        }
+
+        getAllSongsFromIndexedDB().then(async song_array => {
+
+            if (song_array.length == 0) {
+                removeAllSongs()
+                loader.style.display = "none"
+                addBtn.disabled = false
+            } else {
+                if (localStorage.getItem("song_order") != "[]") {
+                    const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                    song_array.sort((a, b) => {
+                        return song_order_array.indexOf(a.id) - song_order_array.indexOf(b.id)
+                    })
+                }
+
+                for (const song of song_array) {
+                    await addSong(song.blob, save = false)
+                };
+                loader.style.display = "none"
+                enableButtons()
+            }
+
+
+        }).catch(error => {
+            alert("Failed to retrieve songs from IndexedDB: " + error)
+            removeAllSongs()
+        })
+
+        function getSongIndex(song_name) {
+            console.log(song_name)
+            return getSongNames().indexOf(song_name)
+        }
+
+        async function addSongs() {
+            disableButtons()
+            progressbar.style.width = "0%"
+            const files = await selectFile("audio/mpeg, audio/ogg, .wav", true);
+            const progressbar_chunks = Math.floor(100/files.length)
+            var progress = 0
+            
+            if (files.length != 0) {
+
+                playerPlaceholder = document.getElementById("playerPlaceholder")
+                if (playerPlaceholder != undefined) {
+                    playerPlaceholder.remove()
+                }
+                for (const file of files) {
+                    await addSong(file)
+                    progress += progressbar_chunks
+                    progressbar.style.width = progressbar_chunks + "%"
+                }
+                
+            }
+            progressbar.style.width = "100%"
+            enableButtons()
+        }
+
+        async function addSong(file, save = true) {
+            if (getSongNames().includes(file.name)) {
+                Toastify({
+                    text: "Error: Song " + file.name + " already on playlist.",
+                    duration: 3000,
+                    close: true,
+                    gravity: "top",
+                    position: "right",
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #ff3d3d, #e84fe0)",
+                        color: "#111"
+                    },
+                    onClick: function () { }
+                }).showToast();
+            } else {
+                if (save) {
+                    await saveSongToIndexedDB(file, file.name).then(() => {
+                        const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                        song_order_array.push(file.name)
+                        localStorage.setItem("song_order", JSON.stringify(song_order_array))
+                    }).catch((error) => alert("Failed to save song to IndexedDB: " + error))
+                }
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = playerTemplate.innerHTML
+                const playerHtml = wrapper.firstElementChild
+                // Set title
+                playerHtml.firstElementChild.firstElementChild.firstElementChild.textContent = file.name
+                // Set audio player to play the file
+                const audioElem = playerHtml.querySelector("audio")
+                const xBtn = playerHtml.querySelector(".x-btn")
+                const upBtn = playerHtml.querySelector(".up-btn")
+                const downBtn = playerHtml.querySelector(".down-btn")
+                xBtn.setAttribute("onclick", "removeSong(\"" + file.name + "\")")
+                upBtn.setAttribute("onclick", "moveSongUp(\"" + file.name + "\")")
+                downBtn.setAttribute("onclick", "moveSongDown(\"" + file.name + "\")")
+
+                audioElem.src = URL.createObjectURL(file)
+                audioElem.setAttribute("name", file.name)
+                playerHtml.querySelector(".player").setAttribute("id", file.name)
+                playerContainer.innerHTML += wrapper.innerHTML
+            }
+        }
+
+        function removeSong(song_name) {
+            playerContainer.children[getSongIndex(song_name)].remove()
+            const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+            var index = song_order_array.indexOf(song_name);
+            if (index >= 0) {
+                song_order_array.splice(index, 1);
+            }
+            localStorage.setItem("song_order", JSON.stringify(song_order_array))
+            removeSongFromIndexedDB(song_name)
+            if (playerIsEmpty()) {
+                removeAllSongs()
+            }
+        }
+        function playerIsEmpty() {
+            return getSongNames().length == 0
+        }
+
+        function moveSongUp(song_name) {
+            const song_index = getSongIndex(song_name)
+            // check if we can move the song up
+            const players = playerContainer.children
+            if (players[song_index - 1] != undefined) {
+                const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                arraymove(song_order_array, song_index, song_index - 1)
+                localStorage.setItem("song_order", JSON.stringify(song_order_array))
+                playerContainer.insertBefore(playerContainer.children[song_index], playerContainer.children[song_index - 1])
+            }
+        }
+
+        function moveSongDown(song_name) {
+            // ugly but it works
+            const song_index = getSongIndex(song_name)
+            // check if we can move the song down
+            const players = playerContainer.children
+            if (players[song_index + 1] != undefined) {
+                const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                arraymove(song_order_array, song_index, song_index + 1)
+                localStorage.setItem("song_order", JSON.stringify(song_order_array))
+                playerContainer.insertBefore(playerContainer.children[song_index], playerContainer.children[song_index + 2])
+
+            }
+        }
+
+        function removeAllSongsAfterConfirm() {
+            if (confirm("Are you sure you want to remove all songs?")) {
+                removeAllSongs()
+            }
+        }
+        function removeAllSongs() {
+            playerContainer.innerHTML = playerPlaceholderTemplate.innerHTML
+            RemoveAllBtn.setAttribute("disabled", "")
+            localStorage.setItem("song_order", "[]")
+            removeAllSongsFromIndexedDB()
+        }
+
+        function getSongNames() {
+
+            return Array.from(playerContainer.querySelectorAll("audio[name]")).map(audioElem => audioElem.getAttribute("name"))
+
+        }
+
+        function selectFile(contentType, multiple) {
+            return new Promise(resolve => {
+                let input = document.createElement('input');
+                input.type = 'file';
+                input.multiple = multiple;
+                input.accept = contentType;
+
+                input.onchange = _ => {
+                    let files = Array.from(input.files);
+                    if (multiple)
+                        resolve(files);
+                    else
+                        resolve(files[0]);
+                };
+
+                input.click();
+
+            });
+        }
+
+        function stopAllExcept(song_name) {
+
+            getSongNames().forEach(song => {
+                if (song != song_name) {
+                    playerContainer.querySelector("audio[name=\"" + song + "\"]").pause()
+                }
+
+            })
+        }
+        function nextSong(song_name) {
+            const song_index = getSongIndex(song_name)
+            const nextSong = getSongNames()[song_index + 1]
+            console.log("playing " + song_index)
+            if (nextSong != undefined) {
+                document.querySelector("audio[name=\"" + nextSong + "\"]").play()
+            }
+        }
+    </script>
+    <script src="toastify.js"></script>
+
+</body>
+
+</html>
