@@ -101,11 +101,11 @@
             <div>
                 <h4 id="currentSongName">No song playing</h1>
             </div>
-            <div class="vertical-flex column-gap-3" style="display:none" id="currentSongContainer">
+            <div class="vertical-flex column-gap-3 black-bg" style="display:none" id="currentSongContainer">
                 <div id="currentSongPlayer">
 
                 </div>
-                <div class="vertical-flex column-gap-3">
+                <div class="vertical-flex column-gap-3" style="margin-right: 3px;">
                     <button class="commands" id="prevBtn" onclick="prevSong()" disabled>&lt;</button>
                     <button class="commands" id="nextBtn" onclick="nextSong()" disabled>&gt;</button>
                 </div>
@@ -113,12 +113,12 @@
         </div>
         <div id="player-template">
             <div class="playerWrapper vertical-flex">
-                <div class="player vertical-flex">
+                <div class="player vertical-flex" style="overflow:hidden">
                     <div class="playbtn-box">
                         <button class="commands play-btn">play</button>
                     </div>
                     <div class="player-box">
-                        <div class="songinfo-box">
+                        <div class="songinfo-box" style="  min-width: 0;">
                             <h4 style="text-align: left;" class="song-title">No name</h4>
                             <div id="songDuration" class="white-text">00:00:00</div>
                         </div>

@@ -96,8 +96,10 @@ p {
 }
 
 .player-box {
+    overflow: hidden;
     text-align: left;
     flex-grow: 1;
+    flex-basis: 0;
 }
 
 .playerWrapper {
@@ -151,7 +153,6 @@ button.x-btn {
     bottom: 0;
     border: 3px solid rgb(51, 143, 255);
     background-color: #666;
-
     overflow: auto;
     padding-bottom: 10px;
 }
@@ -159,7 +160,13 @@ button.x-btn {
 .song-title {
     margin-bottom: 4px;
     margin-top: 0;
-    color: #cccccc
+    color: #cccccc;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    max-width: 100%;
+    
 }
 
 
@@ -205,9 +212,7 @@ button.x-btn {
     flex-grow: 1;
 }
 
-#currentSongContainer {
-    margin-right: 3px;
-}
+
 #currentSongName {
     margin: 5px
 }
@@ -223,4 +228,8 @@ button.x-btn {
 }
 .column-gap-3 {
     column-gap: 3px;
+}
+
+.black-bg {
+    background-color: #232323;
 }
