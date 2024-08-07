@@ -70,51 +70,37 @@ p {
     padding-top: 5px;
     padding-bottom: 5px;
 }
- 
+
 .text-with-icon {
-    font-size:20px;  
+    font-size: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
 .player {
     margin-top: 10px;
     margin-left: 7px;
     margin-right: 7px;
     padding: 5px;
     text-align: center;
-    display: flex;
     align-items: stretch;
+    column-gap: 5px;
     width: 100%;
     background-color: #232323;
 }
 
 .btn-box {
-    margin-left: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
     vertical-align: middle;
-    display: flex;
     min-width: 50px;
 }
 
 .player-box {
     text-align: left;
-    flex-grow: 1; 
+    flex-grow: 1;
 }
 
-.arrow-btn-box {
-    display: flex;
-    flex-grow: 1;
-    flex-direction: column;
-}
-
-.x-btn-box {
-    flex-grow: 1;
-    margin: 0;
-}
 .playerWrapper {
-    display: flex;
     justify-content: center;
 }
 
@@ -126,15 +112,20 @@ button.arrow {
 button.commands {
     height: 100%;
     width: 100%;
+    padding-left: 5px;
+    padding-right: 5px;
 }
+
 button.x-btn {
-    color:black;
+    color: black;
     font-size: 20px;
     background-color: red;
 }
 
-.audioPlayer {  
+.audioPlayer {
     width: 100%;
+    display: block;
+    margin:0;
 }
 
 #playerPlaceholderTemplate {
@@ -142,8 +133,6 @@ button.x-btn {
 }
 
 .wrapper {
-    display: flex;
-    flex-direction: column;
     min-height: 100%;
     overflow: auto;
 }
@@ -162,8 +151,7 @@ button.x-btn {
     bottom: 0;
     border: 3px solid rgb(51, 143, 255);
     background-color: #666;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+
     overflow: auto;
     padding-bottom: 10px;
 }
@@ -174,6 +162,7 @@ button.x-btn {
     color: #cccccc
 }
 
+
 .white-text {
     color: #fefefe;
 }
@@ -181,6 +170,7 @@ button.x-btn {
 .align-center {
     text-align: center;
 }
+
 .progress-bar {
     width: 100%;
     background-color: rgb(255, 203, 105);
@@ -189,12 +179,14 @@ button.x-btn {
 .progress-bar-fill {
     display: block;
     background-color: orange;
-    
     transition: width 500ms ease-in-out;
+
 }
+
 .title-wrapper {
     position: relative;
 }
+
 .title-text {
     width: 100%;
     height: 100%;
@@ -205,4 +197,30 @@ button.x-btn {
 
 .title-text {
     z-index: 10;
+}
+
+#currentSongPlayer {
+    display: block;
+    margin: 0;
+    flex-grow: 1;
+}
+
+#currentSongContainer {
+    margin-right: 3px;
+}
+#currentSongName {
+    margin: 5px
+}
+.hidden {
+    display: none;
+}
+.vertical-flex {
+    display: flex;
+}
+.horizontal-flex {
+    display: flex;
+    flex-direction: column;
+}
+.column-gap-3 {
+    column-gap: 3px;
 }
