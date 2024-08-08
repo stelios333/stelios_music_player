@@ -92,7 +92,7 @@
             </button>
         </p>
         <div class="flexi-content-wrapper">
-            <div id="playerContainer">
+            <div id="playlistContainer">
 
             </div>
 
@@ -101,23 +101,31 @@
             <div>
                 <h4 id="currentSongName">No song playing</h1>
             </div>
-            <div class="vertical-flex column-gap-3 black-bg" style="display:none" id="currentSongContainer">
-                <div id="currentSongPlayer">
+            <div class="vertical-flex column-gap-3 black-bg" style="display:none" id="playerWrapper">
+                <div class="vertical-flex column-gap-3" style="margin-left: 3px;">
+                    <button class="commands" id="prevBtn" onclick="prevSong()" disabled>
+                        <span class="circular-icon nopadding"><img src="backward-step-solid.svg" width="20"
+                                height="20"></span>
+                    </button>
+                    <button class="commands" id="nextBtn" onclick="nextSong()" disabled>
+                        <span class="circular-icon nopadding"><img src="forward-step-solid.svg" width="20"
+                                height="20"></span>
+                    </button>
+                </div>
+                <div id="playerContainer">
 
                 </div>
-                <div class="vertical-flex column-gap-3" style="margin-right: 3px;">
-                    <button class="commands" id="prevBtn" onclick="prevSong()" disabled>&lt;</button>
-                    <button class="commands" id="nextBtn" onclick="nextSong()" disabled>&gt;</button>
-                </div>
+                
             </div>
         </div>
-        <div id="player-template">
-            <div class="playerWrapper vertical-flex">
-                <div class="player vertical-flex" style="overflow:hidden">
+        <div id="playlistTemplate">
+            <div class="playlist-wrapper vertical-flex">
+                <div class="playlist vertical-flex" style="overflow:hidden">
                     <div class="playbtn-box">
-                        <button class="commands play-btn">play</button>
+                        <button class="commands play-btn"><span class="circular-icon"><img src="play-solid.svg"
+                                    width="23" height="23"></span></button>
                     </div>
-                    <div class="player-box">
+                    <div class="songinfo-wrapper">
                         <div class="songinfo-box" style="  min-width: 0;">
                             <h4 style="text-align: left;" class="song-title">No name</h4>
                             <div id="songDuration" class="white-text">00:00:00</div>
@@ -126,16 +134,19 @@
                             onended="nextSong(this.getAttribute('name'))"></audio>
                     </div>
                     <div class="btn-box column-gap-3 vertical-flex">
-                        <button class="commands x-btn">x</button>
-                        <button class="commands up-btn">↑</button>
-                        <button class="commands down-btn">↓</button>
+                        <button class="commands x-btn"><span class="circular-icon nopadding"><img src="trash-solid.svg"
+                                    width="20" height="20"></span></button>
+                        <button class="commands up-btn"><span class="circular-icon nopadding"><img
+                                    src="angle-up-solid.svg" width="20" height="20"></span></button>
+                        <button class="commands down-btn"><span class="circular-icon nopadding"><img
+                                    src="angle-down-solid.svg" width="20" height="20"></span></button>
 
                     </div>
                 </div>
             </div>
         </div>
-        <div id="playerPlaceholderTemplate">
-            <div id="playerPlaceholder">
+        <div id="emptyPlaylistTemplate">
+            <div id="playlistPlaceholder">
                 <p>
                     <img alt=""
                         src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIj8+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDQ3Ny44NjcgNDc3Ljg2NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgNDc3Ljg2NyA0NzcuODY3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiBjbGFzcz0iIj48Zz48Zz4KCTxnPgoJCTxwYXRoIGQ9Ik00NzIuMTg0LDQuMzQ3Yy0zLjYzMS0zLjIwOS04LjQ0MS00Ljc1LTEzLjI2MS00LjI1bC0zMDcuMiwzNC4xMzNjLTguNjQ3LDAuOTU3LTE1LjE5LDguMjY1LTE1LjE4OSwxNi45NjRWMzU1LjM0ICAgIGMtMTUuNDY4LTkuMjU2LTMzLjE3NC0xNC4xMDItNTEuMi0xNC4wMTJDMzguMjgxLDM0MS4zMjksMCwzNzEuOTQ2LDAsNDA5LjU5NXMzOC4yODEsNjguMjY3LDg1LjMzMyw2OC4yNjcgICAgczg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N1YxNTEuODg5bDI3My4wNjctMzAuNDEzdjE5OS42OGMtMTUuNDczLTkuMjM4LTMzLjE3OS0xNC4wNjYtNTEuMi0xMy45NjEgICAgYy00Ny4wNTMsMC04NS4zMzMsMzAuNjE4LTg1LjMzMyw2OC4yNjdjMCwzNy42NDksMzguMjgxLDY4LjI2Nyw4NS4zMzMsNjguMjY3czg1LjMzMy0zMC42MDEsODUuMzMzLTY4LjI2N3YtMzU4LjQgICAgQzQ3Ny44NjYsMTIuMjA4LDQ3NS44LDcuNTg0LDQ3Mi4xODQsNC4zNDd6IiBkYXRhLW9yaWdpbmFsPSIjMDAwMDAwIiBjbGFzcz0iYWN0aXZlLXBhdGgiIGRhdGEtb2xkX2NvbG9yPSIjMDAwMDAwIiBmaWxsPSIjRkY3QjAwIi8+Cgk8L2c+CjwvZz48L2c+IDwvc3ZnPgo="
@@ -157,19 +168,19 @@
     <script src="database_mgr.js"></script>
     <script>
 
-        const playerContainer = document.getElementById("playerContainer");
-        const playerTemplate = document.getElementById("player-template")
+        const playlistContainer = document.getElementById("playlistContainer");
+        const playlistTemplate = document.getElementById("playlistTemplate")
         const RemoveAllBtn = document.getElementById("removeallbtn")
         const addBtn = document.getElementById("addbtn")
         const nextBtn = document.getElementById("nextBtn")
         const prevBtn = document.getElementById("prevBtn")
-        const playerPlaceholderTemplate = document.getElementById("playerPlaceholderTemplate")
+        const emptyPlaylistTemplate = document.getElementById("emptyPlaylistTemplate")
         const loader = document.getElementById("loading")
         const header = document.getElementById("header")
         const progressbar = document.getElementById("pbar")
-        const currentSongPlayer = document.getElementById("currentSongPlayer")
+        const playerContainer = document.getElementById("playerContainer")
         const currentSongName = document.getElementById("currentSongName")
-        const currentSongContainer = document.getElementById("currentSongContainer")
+        const playerWrapper = document.getElementById("playerWrapper")
         var previousParent = null
         progressbar.style.height = getAbsoluteHeight(header) + "px"
 
@@ -193,6 +204,29 @@
                     prevBtn.disabled = true
                 }
             }
+        }
+
+        function enableUpDownButtons() {
+            Array.from(playlistContainer.children).forEach((songEntry, index) => {
+                const nextiSong = getSongNames(true)[index + 1]
+                const previSong = getSongNames(true)[index - 1]
+                const upBtn = songEntry.querySelector(".up-btn")
+                const downBtn = songEntry.querySelector(".down-btn")
+                if (nextiSong != undefined) {
+                    //downBtn.disabled = false
+                    downBtn.style.display = "inline-block"
+                } else {
+                    //downBtn.disabled = true
+                    downBtn.style.display = "none"
+                }
+                if (previSong != undefined) {
+                    //upBtn.disabled = false
+                    upBtn.style.display = "inline-block"
+                } else {
+                    //upBtn.disabled = true
+                    upBtn.style.display = "none"
+                }
+            })
         }
 
         function getAbsoluteHeight(el) {
@@ -243,6 +277,7 @@
                     await addSong(song.blob, save = false)
                 };
                 loader.style.display = "none"
+                enableUpDownButtons()
                 enableButtons()
             }
 
@@ -270,9 +305,9 @@
 
             if (files.length != 0) {
 
-                playerPlaceholder = document.getElementById("playerPlaceholder")
-                if (playerPlaceholder != undefined) {
-                    playerPlaceholder.remove()
+                playlistPlaceholder = document.getElementById("playlistPlaceholder")
+                if (playlistPlaceholder != undefined) {
+                    playlistPlaceholder.remove()
                 }
                 for (const file of files) {
                     await addSong(file)
@@ -282,6 +317,7 @@
 
             }
             progressbar.style.width = "100%"
+            enableUpDownButtons()
             enableButtons()
         }
 
@@ -309,7 +345,7 @@
                     }).catch((error) => alert("Failed to save song to IndexedDB: " + error))
                 }
                 var wrapper = document.createElement('div');
-                wrapper.innerHTML = playerTemplate.innerHTML
+                wrapper.innerHTML = playlistTemplate.innerHTML
                 const playerHtml = wrapper.firstElementChild
                 // Set title
                 playerHtml.querySelector(".song-title").textContent = file.name
@@ -331,7 +367,7 @@
 
                 }
 
-                playerContainer.appendChild(playerHtml)
+                playlistContainer.appendChild(playerHtml)
 
 
 
@@ -342,7 +378,7 @@
             if (song_name == getCurrentSongName()) {
                 stopCurrentSong()
             }
-            playerContainer.children[getSongIndex(song_name)].remove()
+            playlistContainer.children[getSongIndex(song_name)].remove()
 
             const song_order_array = JSON.parse(localStorage.getItem("song_order"))
             var index = song_order_array.indexOf(song_name);
@@ -352,6 +388,7 @@
             localStorage.setItem("song_order", JSON.stringify(song_order_array))
             removeSongFromIndexedDB(song_name)
             enableNextPreviousButtons()
+            enableUpDownButtons()
             if (playerIsEmpty()) {
                 removeAllSongs()
             }
@@ -364,30 +401,34 @@
         function moveSongUp(song_name) {
             const song_index = getSongIndex(song_name)
             // check if we can move the song up
-            const players = playerContainer.children
-            if (players[song_index - 1] != undefined) {
+            const songEntries = playlistContainer.children
+            if (songEntries[song_index - 1] != undefined) {
                 const song_order_array = JSON.parse(localStorage.getItem("song_order"))
                 arraymove(song_order_array, song_index, song_index - 1)
                 localStorage.setItem("song_order", JSON.stringify(song_order_array))
-                playerContainer.insertBefore(playerContainer.children[song_index], playerContainer.children[song_index - 1])
+                playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index - 1])
             }
             // Song order has changed
             enableNextPreviousButtons()
+            enableUpDownButtons()
         }
 
         function moveSongDown(song_name) {
             // ugly but it works
             const song_index = getSongIndex(song_name)
             // check if we can move the song down
-            const players = playerContainer.children
-            if (players[song_index + 1] != undefined) {
+            const songEntries = playlistContainer.children
+            if (songEntries[song_index + 1] != undefined) {
                 const song_order_array = JSON.parse(localStorage.getItem("song_order"))
                 arraymove(song_order_array, song_index, song_index + 1)
                 localStorage.setItem("song_order", JSON.stringify(song_order_array))
-                playerContainer.insertBefore(playerContainer.children[song_index], playerContainer.children[song_index + 2])
+                playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index + 2])
+                const nextiSong = getSongNames(true)[song_index + 1]
 
             }
+
             enableNextPreviousButtons()
+            enableUpDownButtons()
         }
 
         function removeAllSongsAfterConfirm() {
@@ -399,16 +440,16 @@
             if (getCurrentSongName() != null) {
                 stopCurrentSong()
             }
-            playerContainer.innerHTML = playerPlaceholderTemplate.innerHTML
+            playlistContainer.innerHTML = emptyPlaylistTemplate.innerHTML
             RemoveAllBtn.setAttribute("disabled", "")
             localStorage.setItem("song_order", "[]")
             removeAllSongsFromIndexedDB()
         }
 
         function getSongNames(include_playing = false) {
-            var playlist = Array.from(playerContainer.querySelectorAll("audio[name]")).map(audioElem => audioElem.getAttribute("name"))
-            if (include_playing && currentSongPlayer.firstElementChild != null) {
-                Array.from(playerContainer.children).forEach((child, index) => {
+            var playlist = Array.from(playlistContainer.querySelectorAll("audio[name]")).map(audioElem => audioElem.getAttribute("name"))
+            if (include_playing && playerContainer.firstElementChild != null) {
+                Array.from(playlistContainer.children).forEach((child, index) => {
                     if (child.querySelector("audio") == null) {
                         playlist.splice(index, 0, getCurrentSongName())
                     }
@@ -420,8 +461,8 @@
         }
 
         function getCurrentSongName() {
-            if (currentSongPlayer.firstElementChild != null) {
-                return currentSongPlayer.firstElementChild.getAttribute("name")
+            if (playerContainer.firstElementChild != null) {
+                return playerContainer.firstElementChild.getAttribute("name")
             }
             else return null
         }
@@ -480,23 +521,25 @@
         function playSong(song_name) {
 
             stopCurrentSong()
-            currentSongContainer.style.display = "flex"
+            playerWrapper.style.display = "flex"
             previousParent = document.querySelector("audio[name=\"" + song_name + "\"]").parentNode
+            playlistContainer.children[getSongIndex(song_name)].querySelector(".song-title").classList.add("selected-song")
             currentSongName.textContent = "Now playing: " + song_name
             const currentSongElem = document.querySelector("audio[name=\"" + song_name + "\"]")
             currentSongElem.classList.remove("hidden")
-            currentSongPlayer.appendChild(currentSongElem)
-            currentSongPlayer.firstElementChild.play()
+            playerContainer.appendChild(currentSongElem)
+            playerContainer.firstElementChild.play()
             enableNextPreviousButtons()
         }
         function stopCurrentSong() {
-            if (previousParent != null && currentSongPlayer.firstElementChild != null) {
+            if (previousParent != null && playerContainer.firstElementChild != null) {
+                playlistContainer.children[getSongIndex(getCurrentSongName())].querySelector(".song-title").classList.remove("selected-song")
                 currentSongName.textContent = "No song playing"
-                currentSongContainer.style.display = "none"
-                currentSongPlayer.firstElementChild.pause()
-                currentSongPlayer.firstElementChild.classList.add("hidden")
-                currentSongPlayer.firstElementChild.currentTime = 0
-                previousParent.appendChild(currentSongPlayer.firstElementChild)
+                playerWrapper.style.display = "none"
+                playerContainer.firstElementChild.pause()
+                playerContainer.firstElementChild.classList.add("hidden")
+                playerContainer.firstElementChild.currentTime = 0
+                previousParent.appendChild(playerContainer.firstElementChild)
             }
         }
     </script>
