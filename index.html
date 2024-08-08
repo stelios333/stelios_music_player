@@ -102,7 +102,11 @@
                 <h4 id="currentSongName">No song playing</h1>
             </div>
             <div class="vertical-flex column-gap-3 black-bg" style="display:none" id="playerWrapper">
-                <div class="vertical-flex column-gap-3" style="margin-left: 3px;">
+
+                <div id="playerContainer">
+
+                </div>
+                <div class="vertical-flex column-gap-3" style="margin-right: 3px;">
                     <button class="commands" id="prevBtn" onclick="prevSong()" disabled>
                         <span class="circular-icon nopadding"><img src="backward-step-solid.svg" width="20"
                                 height="20"></span>
@@ -112,10 +116,6 @@
                                 height="20"></span>
                     </button>
                 </div>
-                <div id="playerContainer">
-
-                </div>
-                
             </div>
         </div>
         <div id="playlistTemplate">
@@ -123,6 +123,8 @@
                 <div class="playlist vertical-flex" style="overflow:hidden">
                     <div class="playbtn-box">
                         <button class="commands play-btn"><span class="circular-icon"><img src="play-solid.svg"
+                                    width="23" height="23"></span></button>
+                        <button class="commands stop-btn hidden"><span class="circular-icon"><img src="stop-solid.svg"
                                     width="23" height="23"></span></button>
                     </div>
                     <div class="songinfo-wrapper">
@@ -134,13 +136,13 @@
                             onended="nextSong(this.getAttribute('name'))"></audio>
                     </div>
                     <div class="btn-box column-gap-3 vertical-flex">
+
+                        <button class="commands up-btn fadeable"><span class="circular-icon nopadding"><img
+                                    src="angle-up-solid.svg" width="20" height="20"></span></button>
+                        <button class="commands down-btn fadeable"><span class="circular-icon nopadding"><img
+                                    src="angle-down-solid.svg" width="20" height="20"></span></button>
                         <button class="commands x-btn"><span class="circular-icon nopadding"><img src="trash-solid.svg"
                                     width="20" height="20"></span></button>
-                        <button class="commands up-btn"><span class="circular-icon nopadding"><img
-                                    src="angle-up-solid.svg" width="20" height="20"></span></button>
-                        <button class="commands down-btn"><span class="circular-icon nopadding"><img
-                                    src="angle-down-solid.svg" width="20" height="20"></span></button>
-
                     </div>
                 </div>
             </div>
@@ -155,7 +157,7 @@
                 </p>
                 <h2 class="white-text align-center">
                     <span class="text-with-icon">Click
-                        <span class="circular-icon plus-icon" style="margin-right: 5px;">
+                        <span class="circular-icon plus-icon">
                             <img src="plus-solid.svg" width="20" height="20">
                         </span>
                         to add a song
@@ -188,6 +190,63 @@
             localStorage.setItem("song_order", "[]")
         }
 
+        function getTransitionDuration(elem) {
+            // Returns the first transition duration in ms
+            const transitionDuration = getCssProperty(elem, 'transition-duration').split(", ")[0]
+            const transitionDurarationMs = Number(transitionDuration.substring(0, transitionDuration.length - 1)) * 1000
+            return transitionDurarationMs
+        }
+        function getCssProperty(elem, property) {
+            const style = window.getComputedStyle(elem)
+            return style.getPropertyValue(property)
+        }
+
+
+        function animatedHide(elem) {
+            elem.classList.add("fade")
+            setTimeout(() => {
+                elem.style.display = "none"
+            }, getTransitionDuration(elem))
+        }
+
+        function animatedShow(elem) {
+            elem.style.display = "inline-block"
+            elem.classList.remove("fade")
+        }
+
+        function songUpAnimation(song_index) {
+            return new Promise((resolve) => {
+                const songEntry = playlistContainer.children[song_index]
+                if (songEntry != undefined) {
+                    const newHeight = getAbsoluteHeight(songEntry)
+                    songEntry.classList.add("transition-transform")
+                    songEntry.style.transform = "translateY(-" + newHeight + "px)"
+                    setTimeout(() => {
+                        songEntry.classList.remove("transition-transform")
+                        songEntry.style.transform = "translateY(0px)"
+                        resolve()
+                    }, getTransitionDuration(songEntry))
+                }
+            })
+
+        }
+
+        function songDownAnimation(song_index) {
+            return new Promise((resolve) => {
+                const songEntry = playlistContainer.children[song_index]
+                if (songEntry != undefined) {
+                    const newHeight = getAbsoluteHeight(songEntry)
+                    songEntry.classList.add("transition-transform")
+                    songEntry.style.transform = "translateY(" + newHeight + "px)"
+                    setTimeout(() => {
+                        songEntry.classList.remove("transition-transform")
+                        songEntry.style.transform = "translateY(0px)"
+                        resolve()
+                    }, getTransitionDuration(songEntry))
+                }
+            })
+        }
+
         function enableNextPreviousButtons() {
             if (getCurrentSongName() != null) {
                 const song_index = getSongIndex(getCurrentSongName())
@@ -213,19 +272,29 @@
                 const upBtn = songEntry.querySelector(".up-btn")
                 const downBtn = songEntry.querySelector(".down-btn")
                 if (nextiSong != undefined) {
-                    //downBtn.disabled = false
-                    downBtn.style.display = "inline-block"
+                    downBtn.disabled = false
+                    animatedShow(downBtn)
                 } else {
-                    //downBtn.disabled = true
-                    downBtn.style.display = "none"
+                    downBtn.disabled = true
+                    animatedHide(downBtn)
                 }
                 if (previSong != undefined) {
-                    //upBtn.disabled = false
-                    upBtn.style.display = "inline-block"
+                    upBtn.disabled = false
+                    animatedShow(upBtn)
                 } else {
-                    //upBtn.disabled = true
-                    upBtn.style.display = "none"
+                    upBtn.disabled = true
+                    animatedHide(upBtn)
                 }
+            })
+        }
+
+        function disableUpDownButtons() {
+            Array.from(playlistContainer.children).forEach((songEntry, index) => {
+                const upBtn = songEntry.querySelector(".up-btn")
+                const downBtn = songEntry.querySelector(".down-btn")
+                downBtn.disabled = true
+                upBtn.disabled = true
+
             })
         }
 
@@ -355,11 +424,14 @@
                 const upBtn = playerHtml.querySelector(".up-btn")
                 const downBtn = playerHtml.querySelector(".down-btn")
                 const playBtn = playerHtml.querySelector(".play-btn")
+                const stopBtn = playerHtml.querySelector(".stop-btn")
 
                 xBtn.setAttribute("onclick", "removeSong(\"" + file.name + "\")")
                 upBtn.setAttribute("onclick", "moveSongUp(\"" + file.name + "\")")
                 downBtn.setAttribute("onclick", "moveSongDown(\"" + file.name + "\")")
                 playBtn.setAttribute("onclick", "playSong(\"" + file.name + "\")")
+                stopBtn.setAttribute("onclick", "stopCurrentSong()")
+
                 audioElem.src = URL.createObjectURL(file)
                 audioElem.setAttribute("name", file.name)
                 audioElem.onloadedmetadata = () => {
@@ -399,36 +471,46 @@
         }
 
         function moveSongUp(song_name) {
+            disableUpDownButtons()
             const song_index = getSongIndex(song_name)
             // check if we can move the song up
-            const songEntries = playlistContainer.children
-            if (songEntries[song_index - 1] != undefined) {
-                const song_order_array = JSON.parse(localStorage.getItem("song_order"))
-                arraymove(song_order_array, song_index, song_index - 1)
-                localStorage.setItem("song_order", JSON.stringify(song_order_array))
-                playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index - 1])
-            }
-            // Song order has changed
-            enableNextPreviousButtons()
-            enableUpDownButtons()
+            songUpAnimation(song_index)
+            songDownAnimation(song_index - 1).then(() => {
+                const songEntries = playlistContainer.children
+                if (songEntries[song_index - 1] != undefined) {
+                    const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                    arraymove(song_order_array, song_index, song_index - 1)
+                    localStorage.setItem("song_order", JSON.stringify(song_order_array))
+                    playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index - 1])
+                }
+                // Song order has changed
+                enableNextPreviousButtons()
+                enableUpDownButtons()
+            })
+
         }
 
         function moveSongDown(song_name) {
-            // ugly but it works
+            disableUpDownButtons()
+
             const song_index = getSongIndex(song_name)
-            // check if we can move the song down
-            const songEntries = playlistContainer.children
-            if (songEntries[song_index + 1] != undefined) {
-                const song_order_array = JSON.parse(localStorage.getItem("song_order"))
-                arraymove(song_order_array, song_index, song_index + 1)
-                localStorage.setItem("song_order", JSON.stringify(song_order_array))
-                playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index + 2])
-                const nextiSong = getSongNames(true)[song_index + 1]
+            songDownAnimation(song_index)
+            songUpAnimation(song_index + 1).then(() => {
 
-            }
+                // check if we can move the song down
+                const songEntries = playlistContainer.children
+                if (songEntries[song_index + 1] != undefined) {
+                    const song_order_array = JSON.parse(localStorage.getItem("song_order"))
+                    arraymove(song_order_array, song_index, song_index + 1)
+                    localStorage.setItem("song_order", JSON.stringify(song_order_array))
+                    playlistContainer.insertBefore(songEntries[song_index], songEntries[song_index + 2])
+                    const nextiSong = getSongNames(true)[song_index + 1]
 
-            enableNextPreviousButtons()
-            enableUpDownButtons()
+                }
+
+                enableNextPreviousButtons()
+                enableUpDownButtons()
+            })
         }
 
         function removeAllSongsAfterConfirm() {
@@ -519,11 +601,14 @@
         }
 
         function playSong(song_name) {
-
+            const currentEntry = playlistContainer.children[getSongIndex(song_name)]
             stopCurrentSong()
             playerWrapper.style.display = "flex"
             previousParent = document.querySelector("audio[name=\"" + song_name + "\"]").parentNode
-            playlistContainer.children[getSongIndex(song_name)].querySelector(".song-title").classList.add("selected-song")
+            currentEntry.querySelector(".song-title").classList.add("selected-song")
+            currentEntry.querySelector(".stop-btn").classList.remove("hidden")
+            currentEntry.querySelector(".play-btn").classList.add("hidden")
+
             currentSongName.textContent = "Now playing: " + song_name
             const currentSongElem = document.querySelector("audio[name=\"" + song_name + "\"]")
             currentSongElem.classList.remove("hidden")
@@ -533,7 +618,10 @@
         }
         function stopCurrentSong() {
             if (previousParent != null && playerContainer.firstElementChild != null) {
-                playlistContainer.children[getSongIndex(getCurrentSongName())].querySelector(".song-title").classList.remove("selected-song")
+                const currentEntry = playlistContainer.children[getSongIndex(getCurrentSongName())]
+                currentEntry.querySelector(".song-title").classList.remove("selected-song")
+                currentEntry.querySelector(".stop-btn").classList.add("hidden")
+                currentEntry.querySelector(".play-btn").classList.remove("hidden")
                 currentSongName.textContent = "No song playing"
                 playerWrapper.style.display = "none"
                 playerContainer.firstElementChild.pause()
