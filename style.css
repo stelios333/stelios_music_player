@@ -260,3 +260,13 @@ button.x-btn {
 .transition-transform {
     transition: transform 0.5s;
 }
+
+#playlistPlaceholder {
+    height: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
