@@ -202,19 +202,6 @@
             return style.getPropertyValue(property)
         }
 
-
-        function animatedHide(elem) {
-            elem.classList.add("fade")
-            setTimeout(() => {
-                elem.style.display = "none"
-            }, getTransitionDuration(elem))
-        }
-
-        function animatedShow(elem) {
-            elem.style.display = "inline-block"
-            elem.classList.remove("fade")
-        }
-
         function songUpAnimation(song_index) {
             return new Promise((resolve) => {
                 const songEntry = playlistContainer.children[song_index]
@@ -274,17 +261,13 @@
                 const downBtn = songEntry.querySelector(".down-btn")
                 if (nextiSong != undefined) {
                     downBtn.disabled = false
-                    animatedShow(downBtn)
                 } else {
                     downBtn.disabled = true
-                    animatedHide(downBtn)
                 }
                 if (previSong != undefined) {
                     upBtn.disabled = false
-                    animatedShow(upBtn)
                 } else {
                     upBtn.disabled = true
-                    animatedHide(upBtn)
                 }
             })
         }

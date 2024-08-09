@@ -89,7 +89,6 @@ p {
 
 .btn-box {
     vertical-align: middle;
-    min-width: 50px;
 }
 
 .songinfo-wrapper {
@@ -245,16 +244,13 @@ button.x-btn {
     font-weight: bold;
 }
 
-.fadeable {
+button.fadeable {
     opacity: 1;
-
-    transition: opacity 0.5s, transform 0.5s;
-    transform: scale(1);
+    transition: opacity 0.5s
 }
 
-.fadeable.fade {
-    opacity: 0;
-    transform: scale(0);
+button.fadeable:disabled {
+    opacity: 0.7;
 }
 
 .transition-transform {
@@ -269,4 +265,12 @@ button.x-btn {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+}
+
+#playerWrapper {
+    height:100%;
+    transition: height 0.5s;
+}
+#playerWrapper.slide-up {
+    height: 0%;
 }
