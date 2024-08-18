@@ -163,6 +163,9 @@
                             to add a song
                         </span>
                     </h2>
+                    <div class="playlist-empty-reason align-center">
+
+                    </div>
                 </div>
             </div>
 
@@ -184,6 +187,7 @@
         const playerContainer = document.getElementById("playerContainer")
         const currentSongName = document.getElementById("currentSongName")
         const playerWrapper = document.getElementById("playerWrapper")
+        var debugMode = true
         var previousParent = null
         progressbar.style.height = getAbsoluteHeight(header) + "px"
 
@@ -315,7 +319,8 @@
         getAllSongsFromIndexedDB().then(async song_array => {
 
             if (song_array.length == 0) {
-                removeAllSongs()
+                // Trying to figure out why songs dissapear sometimes.
+                removeAllSongs("<span class='red'>No songs found in IndexedDB</span>")
                 loader.style.display = "none"
                 addBtn.disabled = false
             } else {
@@ -502,11 +507,14 @@
                 removeAllSongs()
             }
         }
-        function removeAllSongs() {
+        function removeAllSongs(reason=null) {
             if (getCurrentSongName() != null) {
                 stopCurrentSong()
             }
             playlistContainer.innerHTML = emptyPlaylistTemplate.innerHTML
+            if(reason != null && debugMode) {
+                playlistContainer.querySelector(".playlist-empty-reason").innerHTML = reason
+            }
             RemoveAllBtn.setAttribute("disabled", "")
             localStorage.setItem("song_order", "[]")
             removeAllSongsFromIndexedDB()

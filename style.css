@@ -235,6 +235,10 @@ button.x-btn {
     background-color: #232323;
 }
 
+.red {
+    color: red
+}
+
 .nopadding {
     padding: 0 !important;
 }
@@ -265,6 +269,10 @@ button.fadeable:disabled {
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
+}
+
+.playlist-empty-reason {
+    font-size: 10px;
 }
 
 #playerWrapper {
